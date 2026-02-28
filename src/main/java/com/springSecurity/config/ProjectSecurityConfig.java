@@ -6,6 +6,7 @@ import com.springSecurity.exceptionHandling.CustomBasicAuthenticationEntryPoint;
 import com.springSecurity.filter.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -36,6 +37,15 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @Profile("!production")
 public class ProjectSecurityConfig {
+
+    /*@Value("${spring.security.oauth2.resourceserver.opaque.introspection-uri}")
+    String introspectionUri;
+    @Value("${spring.security.oauth2.resourceserver.opaque.introspection-client-id}")
+    String introspectionId;
+    @Value("${spring.security.oauth2.resourceserver.opaque.introspection-client-secret}")
+    String introspectionSecret;
+    */
+
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -92,6 +102,10 @@ public class ProjectSecurityConfig {
         http.oauth2ResourceServer(rsc -> rsc
                 .jwt(jwtConfigurer -> jwtConfigurer
                         .jwtAuthenticationConverter(jwtAuthenticationConverter)));
+        /*http.oauth2ResourceServer(rsc->rsc
+                .opaqueToken(otc->otc.authenticationConverter(new KeyCloakOpaqueRoleConvertor())
+                        .introspectionUri(introspectionUri)
+                        .introspectionClientCredentials(this.introspectionId,this.introspectionSecret)));*/
         http.exceptionHandling(ehc -> ehc
                 .accessDeniedHandler(
                         new CustomAccessDeniedHandler()));
